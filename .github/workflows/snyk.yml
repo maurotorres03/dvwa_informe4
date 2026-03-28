@@ -7,8 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  snyk-dependencies:
-    name: "Snyk - Dependencias (SCA)"
+  security:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -21,26 +20,12 @@ jobs:
       - name: Install Snyk
         run: npm install -g snyk
 
-      - name: Snyk Test - Dependencias
+      - name: "PASO 1 - Snyk Test (dependencias SCA)"
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: snyk test --all-projects --severity-threshold=low || true
 
-  snyk-code:
-    name: "Snyk Code - Código fuente (SAST)"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install Snyk
-        run: npm install -g snyk
-
-      - name: Snyk Code Test - PHP Source
+      - name: "PASO 2 - Snyk Code (análisis SAST PHP)"
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk code test --severity-threshold=low || true
+        run: snyk code test . || true
