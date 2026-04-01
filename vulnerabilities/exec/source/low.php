@@ -3,6 +3,8 @@
 if( isset( $_POST[ 'Submit' ]  ) ) {
 	// Get input
 	$target = $_REQUEST[ 'ip' ];
+	// Agregamos la linea que corrige la vulnerabilidad 2 lab 4
+	$target = escapeshellarg( $target );
 
 	// Determine OS and execute the ping command.
 	if( stristr( php_uname( 's' ), 'Windows NT' ) ) {
